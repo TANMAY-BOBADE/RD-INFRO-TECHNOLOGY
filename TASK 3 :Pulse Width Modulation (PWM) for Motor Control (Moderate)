@@ -1,0 +1,51 @@
+#include <reg51.h>
+
+sbit MOTOR = P2^0; 
+sbit STOP = P1^0; 
+sbit LOW = P1^1;   
+sbit MEDIUM = P1^2; 
+sbit HIGH = P1^3;  
+sbit FULL = P1^4;  
+void delay_ms(unsigned int ms);
+void pwm_control(unsigned char duty);
+
+void main() {
+    unsigned char dutyCycle = 0;
+
+    while (1) {
+        
+        if (STOP == 0) {       
+            dutyCycle = 0;    
+        } else if (LOW == 0) { 
+            dutyCycle = 25;   
+        } else if (MEDIUM == 0) { 
+            dutyCycle = 50;   
+        } else if (HIGH == 0) {   
+            dutyCycle = 75;   
+        } else if (FULL == 0) {   
+            dutyCycle = 100;   
+        }
+
+        pwm_control(dutyCycle);
+    }
+}
+
+void pwm_control(unsigned char duty) {
+    unsigned char i;
+    for (i = 0; i < 100; i++) { 
+        if (i < duty) {
+            MOTOR = 1; 
+        } else {
+            MOTOR = 0; 
+        }
+        delay_ms(1); 
+    }
+}
+
+
+void delay_ms(unsigned int ms) {
+    unsigned int i, j;
+    for (i = 0; i < ms; i++) {
+        for (j = 0; j < 123; j++); 
+    }
+}
